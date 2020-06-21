@@ -1,0 +1,11 @@
+{
+    "name": "wester/statistics",
+    "config": {
+        "optimize-autoloader": true
+    },
+    "autoload": {
+        "psr-4": {
+            "Statistics\\": "statistics/"
+        }
+    }
+}

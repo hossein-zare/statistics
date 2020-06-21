@@ -1,0 +1,29 @@
+body, html {
+    margin: 0
+}
+
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 5px;
+    text-align: center;
+}
+
+.row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 50px;
+}
+
+.label {
+    font-size: 25px;
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+.value {
+    font-size: 25px;
+}
