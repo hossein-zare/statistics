@@ -25,6 +25,8 @@ class ComposerStaticInit28fabba4751532f413bdf4e39f836372
         'Statistics\\Support\\Collection' => __DIR__ . '/../..' . '/statistics/Support/Collection.php',
         'Statistics\\Support\\StudentsTDistribution' => __DIR__ . '/../..' . '/statistics/Support/StudentsTDistribution.php',
         'Statistics\\Support\\Traits\\CollectionTrait' => __DIR__ . '/../..' . '/statistics/Support/Traits/CollectionTrait.php',
+        'Statistics\\TwoTailedHypothesis' => __DIR__ . '/../..' . '/statistics/TwoTailedHypothesis.php',
+        'Statistics\\TwoTailedHypothesisUnknownVariance' => __DIR__ . '/../..' . '/statistics/TwoTailedHypothesisUnknownVariance.php',
     );
 
     public static function getInitializer(ClassLoader $loader)

@@ -264,11 +264,32 @@ class StudentsTDistribution {
     public $degree;
 
     /**
+     * The mode.
+     * 
+     * @var string
+     */
+    public $mode;
+
+    /**
      * The relation.
      * 
      * @var string
      */
     public $relation;
+
+    /**
+     * The degree decrement.
+     * 
+     * @var int
+     */
+    public $decrement;
+
+    /**
+     * The degree formula.
+     * 
+     * @var string
+     */
+    public $degreeFormula;
 
     /**
      * Create a new instance.
@@ -284,26 +305,60 @@ class StudentsTDistribution {
      * Set new values.
      * 
      * @param  float|string  $alpha
-     * @param  int  $degree
+     * @param  int|array  $degree
      * @param  string  $relation
+     * @param  string|null  $mode
      */
-    public function set($alpha, int $degree, string $relation)
+    public function set($alpha, $degree, string $relation, string $mode = null)
     {
         $this->relation = $relation;
+
+        $this->setMode($degree, $mode);
 
         switch ($relation) {
             case '<=':
                 $this->alpha = (string)((float) $alpha);
-                $this->degree = $degree - 1;
             break;
             case '>=':
                 $this->alpha = (string)((float) $alpha);
-                $this->degree = $degree - 1;
             break;
             case '=':
                 $this->alpha = (string)(((float) $alpha) / 2);
-                $this->degree = $degree - 1;
             break;
+        }
+    }
+
+    /**
+     * Set the mode.
+     * 
+     * @param  int|array  $degree
+     * @param  string  $mode
+     * @return void
+     */
+    private function setMode($degree, string $mode): void
+    {
+        $this->mode = $mode;
+        switch ($mode)
+        {
+            case 'CorrelationCoefficient':
+                $this->decrement = 2;
+                $this->degreeFormula = "n - 2";
+                $this->degree = $degree - $this->decrement;
+            break;
+            case 'TwoTailedHypothesis':
+                $this->decrement = 1;
+                $this->degreeFormula = "n - 1";
+                $this->degree = $degree - $this->decrement;
+            break;
+            case 'TwoTailedHypothesisUnknownVariance':
+                $this->decrement = 2;
+                $this->degreeFormula = "n_1 + n_2 - 2";
+                $this->degree = ($degree[0] + $degree[1]) - $this->decrement;
+            break;
+            default:
+                $this->decrement = 1;
+                $this->degreeFormula = "n - 1";
+                $this->degree = $degree - $this->decrement;
         }
     }
 
@@ -314,8 +369,13 @@ class StudentsTDistribution {
      */
     private function calculate(): float
     {
-        if (! array_key_exists($this->degree, self::TABLE))
+        if (! array_key_exists($this->degree, self::TABLE)) {
+            for ($i = $this->degree + 1; $i <= 120; $i++)
+                if (array_key_exists($i, self::TABLE))
+                    return self::TABLE[$i][$this->alpha];
+
             return self::TABLE[0][$this->alpha];
+        }
 
         return self::TABLE[$this->degree][$this->alpha];
     }
@@ -354,20 +414,18 @@ class StudentsTDistribution {
     /**
      * Get critial value formula.
      * 
-     * @param  int  $decrement
-     * @param  string|null  $relation
      * @return string
      */
-    public function formula(int $decrement = 1, $relation = null): string
+    public function formula(): string
     {
-        switch ($relation ?: $this->relation) {
+        switch ($this->relation) {
             case '<=':
-                return "`t(\alpha, n - {$decrement}) = t({$this->alpha}, {$this->degree}) = {$this->criticalValue()}`";
+                return "`t(\alpha, {$this->degreeFormula}) = t({$this->alpha}, {$this->degree}) = {$this->criticalValue()}`";
             case '>=':
-                return "`-t(\alpha, n - {$decrement}) = -t({$this->alpha}, {$this->degree}) = {$this->criticalValue()}`";
+                return "`-t(\alpha, {$this->degreeFormula}) = -t({$this->alpha}, {$this->degree}) = {$this->criticalValue()}`";
             case '=':
                 $alpha = $this->alpha * 2;
-                return "`t(\alpha / 2, n - {$decrement}) = t({$alpha} / 2, {$this->degree}) = t({$this->alpha}, {$this->degree}) = {$this->criticalValue()}`";
+                return "`t(\alpha / 2, {$this->degreeFormula}) = t({$alpha} / 2, {$this->degree}) = t({$this->alpha}, {$this->degree}) = {$this->criticalValue()}`";
         }
     }
 
@@ -386,13 +444,13 @@ class StudentsTDistribution {
         switch ($this->relation) {
             case '<=':
                 $symbol = $condition ? '>' : '\cancel{>}';
-                return "`T_0 > t(\alpha, n - 1) -> {$tZero} {$symbol} {$this->criticalValue()} -> H_0: {$h}`";
+                return "`T_0 > t(\alpha, {$this->degreeFormula}) -> {$tZero} {$symbol} {$this->criticalValue()} -> H_0: {$h}`";
             case '>=':
                 $symbol = $condition ? '<' : '\cancel{<}';
-                return "`T_0 < -t(\alpha, n - 1) -> {$tZero} {$symbol} {$this->criticalValue()} -> H_0: {$h}`";
+                return "`T_0 < -t(\alpha, {$this->degreeFormula}) -> {$tZero} {$symbol} {$this->criticalValue()} -> H_0: {$h}`";
             case '=':
                 $symbol = $condition ? '>' : '\cancel{>}';
-                return "`|T_0| > t(\alpha / 2, n - 1) -> |{$tZero}| {$symbol} {$this->criticalValue()} -> H_0: {$h}`";
+                return "`|T_0| > t(\alpha / 2, {$this->degreeFormula}) -> |{$tZero}| {$symbol} {$this->criticalValue()} -> H_0: {$h}`";
         }
     }
 }

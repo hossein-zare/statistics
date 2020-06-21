@@ -2,22 +2,26 @@
 
 require "../vendor/autoload.php";
 
-use Statistics\Hypothesis;
+use Statistics\TwoTailedHypothesisUnknownVariance;
 use Statistics\Support\StudentsTDistribution;
 
-$stats = new Hypothesis([
-    210, 235, 208, 190, 172, 244
+$stats = new TwoTailedHypothesisUnknownVariance([
+    'n' => 13,
+    'average' => 4.7,
+    'deviation' => 0.9
 ], [
-    190, 170, 210, 188, 173, 228
+    'n' => 25,
+    'average' => 5.1,
+    'deviation' => 0.8
 ]);
 
-$t = new StudentsTDistribution(0.05, $stats->count, '=');
+$t = new StudentsTDistribution(0.01, $stats->getDegree(), '=', 'TwoTailedHypothesisUnknownVariance');
 
 ?>
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Hypothesis</title>
+        <title>Two-Tailed Hypothesis Unknown Variance</title>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
         <link rel="stylesheet" href="./styles.css?<?php echo time(); ?>">
     </head>

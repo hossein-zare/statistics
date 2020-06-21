@@ -2,42 +2,32 @@
 
 require "../vendor/autoload.php";
 
-use Statistics\CorrelationCoefficient;
+use Statistics\TwoTailedHypothesis;
 use Statistics\Support\StudentsTDistribution;
 
-$stats = new CorrelationCoefficient([
-    43,
-    48,
-    56,
-    61,
-    67,
-    70
+$stats = new TwoTailedHypothesis([
+    210, 235, 208, 190, 172, 244
 ], [
-    128,
-    120,
-    135,
-    143,
-    141,
-    152
+    190, 170, 210, 188, 173, 228
 ]);
 
-$t = new StudentsTDistribution(0.05, $stats->count, '=', 'CorrelationCoefficient');
+$t = new StudentsTDistribution(0.05, $stats->count, '=', 'TwoTailedHypothesis');
 
 ?>
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Correlation Coefficient</title>
+        <title>Two-Tailed Hypothesis</title>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
         <link rel="stylesheet" href="./styles.css?<?php echo time(); ?>">
     </head>
     <body>
         <div class="container mt-5">
-            <div class="mb-5">
-                <?php echo $stats->table(); ?>
+            <div class="row">
+                <div class="value"><?php echo $stats->averageFormula(); ?></div>
             </div>
             <div class="row">
-                <div class="value"><?php echo $stats->formula(); ?></div>
+                <div class="value"><?php echo $stats->varianceDeviationFormula(); ?></div>
             </div>
             <div class="row">
                 <div class="value"><?php echo $stats->tZeroFormula(); ?></div>
@@ -47,10 +37,6 @@ $t = new StudentsTDistribution(0.05, $stats->count, '=', 'CorrelationCoefficient
             </div>
             <div class="row">
                 <div class="value"><?php echo $t->comparisonFormula($stats->tZero()); ?></div>
-            </div>
-            <div class="row">
-                <div class="label">Description:</div>
-                <div class="value"><?php echo $stats->describe(); ?></div>
             </div>
         </div>
 

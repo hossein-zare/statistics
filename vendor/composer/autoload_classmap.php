@@ -10,4 +10,6 @@ return array(
     'Statistics\\Support\\Collection' => $baseDir . '/statistics/Support/Collection.php',
     'Statistics\\Support\\StudentsTDistribution' => $baseDir . '/statistics/Support/StudentsTDistribution.php',
     'Statistics\\Support\\Traits\\CollectionTrait' => $baseDir . '/statistics/Support/Traits/CollectionTrait.php',
+    'Statistics\\TwoTailedHypothesis' => $baseDir . '/statistics/TwoTailedHypothesis.php',
+    'Statistics\\TwoTailedHypothesisUnknownVariance' => $baseDir . '/statistics/TwoTailedHypothesisUnknownVariance.php',
 );

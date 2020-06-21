@@ -3,7 +3,7 @@
 namespace Statistics;
 use Statistics\Support\Traits\CollectionTrait;
 
-class Hypothesis {
+class TwoTailedHypothesis {
     use CollectionTrait;
 
     /**
