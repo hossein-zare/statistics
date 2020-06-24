@@ -355,6 +355,11 @@ class StudentsTDistribution {
                 $this->degreeFormula = "n_1 + n_2 - 2";
                 $this->degree = ($degree[0] + $degree[1]) - $this->decrement;
             break;
+            case 'LinearRegression':
+                $this->decrement = 2;
+                $this->degreeFormula = "n - 2";
+                $this->degree = $degree - $this->decrement;
+            break;
             default:
                 $this->decrement = 1;
                 $this->degreeFormula = "n - 1";

@@ -133,6 +133,6 @@ trait CollectionTrait {
      */
     public function format($number, $percision = 2): string
     {
-        return \number_format($number, $percision);
+        return str_replace(",", "", \number_format($number, $percision));
     }
 }
